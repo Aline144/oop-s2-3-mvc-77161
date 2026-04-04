@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VgcCollege.Web.Data;
 using VgcCollege.Web.Models;
@@ -7,37 +8,43 @@ using VgcCollege.Web.Models;
 namespace VgcCollege.Web.Controllers;
 
 [Authorize(Roles = "Admin")]
-public class BranchesController : Controller
+public class CoursesController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public BranchesController(ApplicationDbContext context)
+    public CoursesController(ApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Branches.ToListAsync());
+        var courses = await _context.Courses
+            .Include(c => c.Branch)
+            .ToListAsync();
+
+        return View(courses);
     }
 
     public IActionResult Create()
     {
+        ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name");
         return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Branch branch)
+    public async Task<IActionResult> Create(Course course)
     {
         if (ModelState.IsValid)
         {
-            _context.Branches.Add(branch);
+            _context.Courses.Add(course);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        return View(branch);
+        ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", course.BranchId);
+        return View(course);
     }
 
     public async Task<IActionResult> Details(int? id)
@@ -47,14 +54,16 @@ public class BranchesController : Controller
             return NotFound();
         }
 
-        var branch = await _context.Branches.FirstOrDefaultAsync(b => b.Id == id);
+        var course = await _context.Courses
+            .Include(c => c.Branch)
+            .FirstOrDefaultAsync(c => c.Id == id);
 
-        if (branch == null)
+        if (course == null)
         {
             return NotFound();
         }
 
-        return View(branch);
+        return View(course);
     }
 
     public async Task<IActionResult> Edit(int? id)
@@ -64,33 +73,35 @@ public class BranchesController : Controller
             return NotFound();
         }
 
-        var branch = await _context.Branches.FindAsync(id);
+        var course = await _context.Courses.FindAsync(id);
 
-        if (branch == null)
+        if (course == null)
         {
             return NotFound();
         }
 
-        return View(branch);
+        ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", course.BranchId);
+        return View(course);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Branch branch)
+    public async Task<IActionResult> Edit(int id, Course course)
     {
-        if (id != branch.Id)
+        if (id != course.Id)
         {
             return NotFound();
         }
 
         if (ModelState.IsValid)
         {
-            _context.Update(branch);
+            _context.Update(course);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        return View(branch);
+        ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", course.BranchId);
+        return View(course);
     }
 
     public async Task<IActionResult> Delete(int? id)
@@ -100,25 +111,27 @@ public class BranchesController : Controller
             return NotFound();
         }
 
-        var branch = await _context.Branches.FirstOrDefaultAsync(b => b.Id == id);
+        var course = await _context.Courses
+            .Include(c => c.Branch)
+            .FirstOrDefaultAsync(c => c.Id == id);
 
-        if (branch == null)
+        if (course == null)
         {
             return NotFound();
         }
 
-        return View(branch);
+        return View(course);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var branch = await _context.Branches.FindAsync(id);
+        var course = await _context.Courses.FindAsync(id);
 
-        if (branch != null)
+        if (course != null)
         {
-            _context.Branches.Remove(branch);
+            _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
         }
 
