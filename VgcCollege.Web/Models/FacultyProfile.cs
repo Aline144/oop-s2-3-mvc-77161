@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VgcCollege.Web.Models;
 
-public class StudentProfile
+public class FacultyProfile
 {
     public int Id { get; set; }
 
@@ -20,18 +20,4 @@ public class StudentProfile
     [Phone]
     [StringLength(20)]
     public string Phone { get; set; } = string.Empty;
-
-    [Required]
-    [StringLength(200)]
-    public string Address { get; set; } = string.Empty;
-
-    [Required]
-    [StringLength(20)]
-    public string StudentNumber { get; set; } = string.Empty;
-
-    public List<CourseEnrolment> CourseEnrolments { get; set; } = new();
-
-    public List<AssignmentResult> AssignmentResults { get; set; } = new();
-
-    public List<ExamResult> ExamResults { get; set; } = new();
 }
