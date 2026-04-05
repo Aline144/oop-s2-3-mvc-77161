@@ -17,35 +17,63 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Branches" asp-action="Index">Branches</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CourseEnrolments" asp-action="Index">Enrolments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="AttendanceRecords" asp-action="Index">Attendance</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Assignments" asp-action="Index">Assignments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="AssignmentResults" asp-action="Index">Assignment Results</a>
-                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Branches" asp-action="Index">Branches</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="CourseEnrolments" asp-action="Index">Enrolments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="AttendanceRecords" asp-action="Index">Attendance</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Assignments" asp-action="Index">Assignments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="AssignmentResults" asp-action="Index">Assignment Results</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Exams" asp-action="Index">Exams</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ExamResults" asp-action="Index">Exam Results</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="StudentPortal" asp-action="MyProfile">My Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="StudentPortal" asp-action="MyExamResults">My Exam Results</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Faculty"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="FacultyPortal" asp-action="MyProfile">My Faculty Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="FacultyPortal" asp-action="StudentList">Student List</a>
+                            </li>
+                        }
                     </ul>
                 }
                 else
@@ -58,7 +86,6 @@
         </div>
     </nav>
 </header>
-
 <div class="container">
     <main role="main" class="pb-3">
         @RenderBody()
@@ -70,7 +97,6 @@
         &copy; 2026 - VgcCollege.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>
 </footer>
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>

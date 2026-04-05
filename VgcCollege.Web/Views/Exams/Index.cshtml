@@ -1,0 +1,41 @@
+@model IEnumerable<VgcCollege.Web.Models.Exam>
+
+@{
+    ViewData["Title"] = "Exams";
+}
+
+<h1>Exams</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Exam</a>
+</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Course</th>
+        <th>Date</th>
+        <th>Max Score</th>
+        <th>Results Released</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var exam in Model)
+    {
+        <tr>
+            <td>@exam.Title</td>
+            <td>@exam.Course?.Name</td>
+            <td>@exam.Date.ToShortDateString()</td>
+            <td>@exam.MaxScore</td>
+            <td>@(exam.ResultsReleased ? "Yes" : "No")</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@exam.Id" class="btn btn-sm btn-info">Details</a>
+                <a asp-action="Edit" asp-route-id="@exam.Id" class="btn btn-sm btn-warning">Edit</a>
+                <a asp-action="Delete" asp-route-id="@exam.Id" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

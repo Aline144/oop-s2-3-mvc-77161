@@ -1,0 +1,36 @@
+@model IEnumerable<VgcCollege.Web.Models.ExamResult>
+
+@{
+    ViewData["Title"] = "My Exam Results";
+}
+
+<h1>My Exam Results</h1>
+
+@if (!Model.Any())
+{
+    <p>No released exam results available.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Exam</th>
+            <th>Course</th>
+            <th>Score</th>
+            <th>Grade</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var result in Model)
+        {
+            <tr>
+                <td>@result.Exam?.Title</td>
+                <td>@result.Exam?.Course?.Name</td>
+                <td>@result.Score</td>
+                <td>@result.Grade</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
