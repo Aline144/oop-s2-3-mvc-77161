@@ -168,4 +168,41 @@ public class AttendanceRecordsController : Controller
 
         return View(attendanceRecord);
     }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var attendanceRecord = await _context.AttendanceRecords
+            .Include(a => a.CourseEnrolment)
+            .ThenInclude(e => e.StudentProfile)
+            .Include(a => a.CourseEnrolment)
+            .ThenInclude(e => e.Course)
+            .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (attendanceRecord == null)
+        {
+            return NotFound();
+        }
+
+        return View(attendanceRecord);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var attendanceRecord = await _context.AttendanceRecords.FindAsync(id);
+
+        if (attendanceRecord != null)
+        {
+            _context.AttendanceRecords.Remove(attendanceRecord);
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
 }
