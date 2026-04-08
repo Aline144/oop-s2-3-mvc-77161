@@ -19,8 +19,4 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.20"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include=".github\workflows\dotnet.yml" />
-    </ItemGroup>
-
 </Project>
